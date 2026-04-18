@@ -1,16 +1,55 @@
 public class Player {
     public Stats stats;
 
-    public enum SlotType {
-        HEAD,
-        CHEST,
-        LEGS,
-        FEET,
-        HAND_LEFT,
-        HAND_RIGHT
+public class bodySlot {
+    private final Item.Properties.Usage usage; // 🔥 key link
+    private Item item;
+
+    public bodySlot(Item.Properties.Usage usage) {
+        this.usage = usage;
     }
 
+    public Item getItem() {
+        return item;
+    }
+
+    public Item.Properties.Usage getUsage() {
+        return usage;
+    }
+
+    public boolean isEmpty() {
+        return item == null;
+    }
+
+    public boolean setItem(Item item) {
+        if (item.getProperties().getUsage() != usage) return false;
+
+        this.item = item;
+        return true;
+    }
+
+    public Item removeItem() {
+        Item old = item;
+        item = null;
+        return old;
+    }
+}
+
+
+
+    public final bodySlot[] BodyMap = new bodySlot[] {
+        new bodySlot(Item.Properties.Usage.HEAD),
+        new bodySlot(Item.Properties.Usage.BODY),
+        new bodySlot(Item.Properties.Usage.LEGS),
+        new bodySlot(Item.Properties.Usage.FEET),
+        new bodySlot(Item.Properties.Usage.HANDS),
+        new bodySlot(Item.Properties.Usage.NECK),
+        new bodySlot(Item.Properties.Usage.FINGER),
+        new bodySlot(Item.Properties.Usage.ONE_HAND) // or TWO_HANDS
+    };
+
     public class Slot {
+        private final Item[] Inventory = new Item[21]; // 7 rows of 3 columns for inventory
         private final Item.Properties.Usage usage;
         private Item item;
 
@@ -28,10 +67,31 @@ public class Player {
             return true;
         }
 
-        public Item unequip() {
+        public Item[] unequip() {
             Item old = item;
+            for (int c = 0; c < Inventory.length; c++) {
+                if (Inventory[c] == null) {
+                    Inventory[c] = old;
+                    break;
+                }
+            }
             item = null;
-            return old;
+            return Inventory;
+        }
+
+        public Item getEquipped() {
+            return item;
+        }
+
+        public Item[] getInventory() {
+            return Inventory;
+        }   
+
+        public void EquipArmor(Item item) {
+            if (item.getProperties().getItemType() != Item.Properties.ItemType.ARMOR) {
+                throw new IllegalArgumentException("Item is not armor");
+            }
+            equip(item);
         }
 
         public void interact(Player player) {
@@ -40,15 +100,11 @@ public class Player {
             switch (item.getProperties().getItemType()) {
                 case WEAPON -> System.out.println("Swing weapon!");
                 case ARMOR -> System.out.println("Armor passive effect applied!");
-                case POTION -> usePotion(player);
+
                 default -> System.out.println("Item has no interaction.");
             }
         }
 
-        private void usePotion(Player player) {
-            System.out.println("Potion consumed!");
-            item.setDurability(item.getDurability() - 1);
-        }
     }
 
     public Player(Stats stats) {

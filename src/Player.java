@@ -1,39 +1,41 @@
 public class Player {
     public Stats stats;
+    public Classes.ClassType className;
+    public Classes.RaceType raceName;
 
-public class bodySlot {
-    private final Item.Properties.Usage usage; // 🔥 key link
-    private Item item;
+    public class bodySlot {
+        private final Item.Properties.Usage usage;
+        private Item item;
 
-    public bodySlot(Item.Properties.Usage usage) {
-        this.usage = usage;
+        public bodySlot(Item.Properties.Usage usage) {
+            this.usage = usage;
+        }
+
+        public Item getItem() {
+            return item;
+        }
+
+        public Item.Properties.Usage getUsage() {
+            return usage;
+        }
+
+        public boolean isEmpty() {
+            return item == null;
+        }
+
+        public boolean setItem(Item item) {
+            if (item.getProperties().getUsage() != usage) return false;
+
+            this.item = item;
+            return true;
+        }
+
+        public Item removeItem() {
+            Item old = item;
+            item = null;
+            return old;
+        }
     }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public Item.Properties.Usage getUsage() {
-        return usage;
-    }
-
-    public boolean isEmpty() {
-        return item == null;
-    }
-
-    public boolean setItem(Item item) {
-        if (item.getProperties().getUsage() != usage) return false;
-
-        this.item = item;
-        return true;
-    }
-
-    public Item removeItem() {
-        Item old = item;
-        item = null;
-        return old;
-    }
-}
 
 
 
@@ -45,7 +47,8 @@ public class bodySlot {
         new bodySlot(Item.Properties.Usage.HANDS),
         new bodySlot(Item.Properties.Usage.NECK),
         new bodySlot(Item.Properties.Usage.FINGER),
-        new bodySlot(Item.Properties.Usage.ONE_HAND) // or TWO_HANDS
+        new bodySlot(Item.Properties.Usage.ONE_HAND),
+        new bodySlot(Item.Properties.Usage.TWO_HANDS)
     };
 
     public class Slot {
@@ -107,8 +110,13 @@ public class bodySlot {
 
     }
 
-    public Player(Stats stats) {
-        this.stats = stats;
+    public Player(Classes.ClassType classType, Classes.RaceType raceType) {
+        this.className = classType;
+        this.raceName = raceType;
+        this.stats = Classes.combine(
+            Classes.getClassStats(classType),
+            Classes.getRaceStats(raceType)
+        );
     }
 
     public void applyEffect(Effect effect) {

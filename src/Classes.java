@@ -1,112 +1,106 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumMap;
 
 public class Classes {
 
-    private final Map<String, Stats> classMap = new HashMap<>();
-    private final Map<String, Stats> raceMap = new HashMap<>();
+    // Enums for class, race, and stats  
+    public enum ClassType {
+        MAGE, WARRIOR, ROGUE, CLERIC, RANGER,
+        PALADIN, BARD, MONK, DRUID,
+        BARBARIAN, SORCERER, WARLOCK
+    }
 
-    public Classes() {
+    public enum RaceType {
+        HUMAN, ELF, DWARF, HALFLING,
+        GNOME, HALF_ELF, HALF_ORC,
+        TIEFLING, DRAGONBORN
+    }
+
+    public enum StatType {
+        STRENGTH, DEXTERITY, CONSTITUTION,
+        INTELLIGENCE, WISDOM, CHARISMA,
+        SPEED, HEALTH, PERCEPTION
+    }
+
+    private static final EnumMap<ClassType, Stats> classMap = new EnumMap<>(ClassType.class);
+    private static final EnumMap<RaceType, Stats> raceMap = new EnumMap<>(RaceType.class);
+
+    static {
         initClasses();
         initRaces();
     }
-    private void initRaces() {
-        raceMap.put("human", new Stats(5, 5, 5, 5, 5, 5, 5, 5, 5));
-        raceMap.put("elf", new Stats(5, 10, 5, 5, 5, 5, 5, 5, 10));
-        raceMap.put("dwarf", new Stats(10, 5, 10, 5, 5, 5, 5, 5, 5));
-        raceMap.put("halfling", new Stats(5, 10, 5, 5, 5, 5, 5, 5, 10));
-        raceMap.put("gnome", new Stats(5, 5, 5, 10, 5, 5, 5, 5, 10));
-        raceMap.put("half-elf", new Stats(5, 5, 5, 5, 5, 7, 5, 5, 7));
-        raceMap.put("half-orc", new Stats(10, 5, 5, 5, 5, 3, 5, 10, 5));
-        raceMap.put("tiefling", new Stats(5, 5, 5, 10, 5, 7, 5, 5, 7));
-        raceMap.put("dragonborn", new Stats(10, 5, 5, 5, 5, 5, 5, 10, 5));
+
+    public Classes() {
     }
 
-    private void initClasses() {
-        classMap.put("mage", new Stats(5, 5, 7, 10, 5, 3, 5, 10, 7));
-        classMap.put("warrior", new Stats(10, 5, 3, 5, 5, 7, 5, 10, 7));
-        classMap.put("rogue", new Stats(5, 10, 5, 5, 5, 7, 10, 7, 10));
-        classMap.put("cleric", new Stats(5, 5, 10, 5, 10, 5, 5, 10, 7));
-        classMap.put("ranger", new Stats(5, 7, 5, 5, 5, 7, 10, 7, 10));
-        classMap.put("paladin", new Stats(7, 5, 10, 5, 7, 5, 5, 10, 7));
-        classMap.put("bard", new Stats(5, 5, 5, 7, 5, 10, 5, 7, 10));
-        classMap.put("monk", new Stats(5, 10, 5, 5, 7, 5, 10, 7, 10));
-        classMap.put("druid", new Stats(5, 5, 7, 5, 10, 5, 5, 10, 7));
-        classMap.put("barbarian", new Stats(10, 5, 7, 5, 5, 3, 5, 10, 7));
-        classMap.put("sorcerer", new Stats(5, 5, 5, 10, 5, 7, 5, 7, 10));
-        classMap.put("warlock", new Stats(5, 5, 5, 10, 5, 7, 5, 7, 10));
-    }
-    public Stats getClassStats(String className) {
-        Stats stats = classMap.get(className.toLowerCase());
-
-        if (stats == null) {
-            throw new IllegalArgumentException("Invalid class name: " + className);
-        }
-
-        return stats;
-    }
-    public void setStats(String className, String statName, int value) {
-        Stats stats = getClassStats(className);
-
-        switch (statName.toLowerCase()) {
-            case "strength", "str" -> stats.strength = value;
-            case "dexterity", "dex" -> stats.dexterity = value;
-            case "constitution", "con" -> stats.constitution = value;
-            case "intelligence", "int" -> stats.intelligence = value;
-            case "wisdom", "wis" -> stats.wisdom = value;
-            case "charisma", "cha" -> stats.charisma = value;
-            case "speed" -> stats.speed = value;
-            case "health", "hp" -> stats.health = value;
-            case "perception", "per" -> stats.perception = value;
-            default -> throw new IllegalArgumentException("Invalid stat name: " + statName);
-        }
-    }
-    public void ModStats(String className, String statName, int value) {
-        Stats stats = getClassStats(className);
-
-        switch (statName.toLowerCase()) {
-            case "strength", "str" -> stats.strength += value;
-            case "dexterity", "dex" -> stats.dexterity += value;
-            case "constitution", "con" -> stats.constitution += value;
-            case "intelligence", "int" -> stats.intelligence += value;
-            case "wisdom", "wis" -> stats.wisdom += value;
-            case "charisma", "cha" -> stats.charisma += value;
-            case "speed" -> stats.speed += value;
-            case "health", "hp" -> stats.health += value;
-            case "perception", "per" -> stats.perception += value;
-            default -> throw new IllegalArgumentException("Invalid stat name: " + statName);
-        }
-    }
-    public void showClassStats(String className) {
-        Stats stats = getClassStats(className);
-
-        System.out.println("Stats for " + className + ":");
-        System.out.println(stats);
+    private static void initClasses() {
+        classMap.put(ClassType.MAGE,       new Stats(5, 5, 7, 10, 5, 3, 5, 10, 7));
+        classMap.put(ClassType.WARRIOR,    new Stats(10, 5, 3, 5, 5, 7, 5, 10, 7));
+        classMap.put(ClassType.ROGUE,      new Stats(5, 10, 5, 5, 5, 7, 10, 7, 10));
+        classMap.put(ClassType.CLERIC,     new Stats(5, 5, 10, 5, 10, 5, 5, 10, 7));
+        classMap.put(ClassType.RANGER,     new Stats(5, 7, 5, 5, 5, 7, 10, 7, 10));
+        classMap.put(ClassType.PALADIN,    new Stats(7, 5, 10, 5, 7, 5, 5, 10, 7));
+        classMap.put(ClassType.BARD,       new Stats(5, 5, 5, 7, 5, 10, 5, 7, 10));
+        classMap.put(ClassType.MONK,       new Stats(5, 10, 5, 5, 7, 5, 10, 7, 10));
+        classMap.put(ClassType.DRUID,      new Stats(5, 5, 7, 5, 10, 5, 5, 10, 7));
+        classMap.put(ClassType.BARBARIAN,  new Stats(10, 5, 7, 5, 5, 3, 5, 10, 7));
+        classMap.put(ClassType.SORCERER,   new Stats(5, 5, 5, 10, 5, 7, 5, 7, 10));
+        classMap.put(ClassType.WARLOCK,    new Stats(5, 5, 5, 10, 5, 7, 5, 7, 10));
     }
 
-    public Stats finalStats(String className, String raceName) {
-        Stats classStats = getClassStats(className);
-        Stats raceStats = raceMap.get(raceName.toLowerCase());
-
-        if (raceStats == null) {
-            throw new IllegalArgumentException("Invalid race name: " + raceName);
-        }
-
-        return combine(classStats, raceStats);
+    private static void initRaces() {
+        raceMap.put(RaceType.HUMAN,      new Stats(5, 5, 5, 5, 5, 5, 5, 5, 5));
+        raceMap.put(RaceType.ELF,        new Stats(5, 10, 5, 5, 5, 5, 5, 5, 10));
+        raceMap.put(RaceType.DWARF,      new Stats(10, 5, 10, 5, 5, 5, 5, 5, 5));
+        raceMap.put(RaceType.HALFLING,   new Stats(5, 10, 5, 5, 5, 5, 5, 5, 10));
+        raceMap.put(RaceType.GNOME,      new Stats(5, 5, 5, 10, 5, 5, 5, 5, 10));
+        raceMap.put(RaceType.HALF_ELF,   new Stats(5, 5, 5, 5, 5, 7, 5, 5, 7));
+        raceMap.put(RaceType.HALF_ORC,   new Stats(10, 5, 5, 5, 5, 3, 5, 10, 5));
+        raceMap.put(RaceType.TIEFLING,   new Stats(5, 5, 5, 10, 5, 7, 5, 5, 7));
+        raceMap.put(RaceType.DRAGONBORN, new Stats(10, 5, 5, 5, 5, 5, 5, 10, 5));
     }
 
-    private Stats combine(Stats a, Stats b) {
-        return new Stats(
-            a.strength + b.strength,
-            a.dexterity + b.dexterity,
-            a.constitution + b.constitution,
-            a.intelligence + b.intelligence,
-            a.wisdom + b.wisdom,
-            a.charisma + b.charisma,
-            a.speed + b.speed,
-            a.health + b.health,
-            a.perception + b.perception
+    // SAFE: returns copy
+    public static Stats getClassStats(ClassType type) {
+        return classMap.get(type).copy();
+    }
+
+    public static Stats getRaceStats(RaceType type) {
+        return raceMap.get(type).copy();
+    }
+
+    public Stats finalStats(ClassType classType, RaceType raceType) {
+        return Stats.combine(
+                getClassStats(classType),
+                getRaceStats(raceType)
         );
     }
 
+    public static Stats combine(Stats s1, Stats s2) {
+        return new Stats(
+            s1.health + s2.health,
+            s1.speed + s2.speed,
+            s1.strength + s2.strength,
+            s1.dexterity + s2.dexterity,
+            s1.constitution + s2.constitution,
+            s1.intelligence + s2.intelligence,
+            s1.wisdom + s2.wisdom,
+            s1.charisma + s2.charisma,
+            s1.perception + s2.perception
+        );
+    }
+
+    // One unified modifier
+    public static void modifyStat(Stats stats, StatType type, int value, boolean additive) {
+        switch (type) {
+            case STRENGTH -> stats.strength = additive ? stats.strength + value : value;
+            case DEXTERITY -> stats.dexterity = additive ? stats.dexterity + value : value;
+            case CONSTITUTION -> stats.constitution = additive ? stats.constitution + value : value;
+            case INTELLIGENCE -> stats.intelligence = additive ? stats.intelligence + value : value;
+            case WISDOM -> stats.wisdom = additive ? stats.wisdom + value : value;
+            case CHARISMA -> stats.charisma = additive ? stats.charisma + value : value;
+            case SPEED -> stats.speed = additive ? stats.speed + value : value;
+            case HEALTH -> stats.health = additive ? stats.health + value : value;
+            case PERCEPTION -> stats.perception = additive ? stats.perception + value : value;
+        }
+    }
 }

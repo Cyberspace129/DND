@@ -1,4 +1,21 @@
 public class General {
+    enum Direction {
+        NORTH, EAST, SOUTH, WEST
+    }
+    public static void Move(int direction){
+        if (direction < 0 || direction > 3) {
+            throw new IllegalArgumentException("Direction must be between 0 and 3");
+        }
+        if (null != Direction.values()[direction])
+            switch (Direction.values()[direction]) {
+            case NORTH -> DND.Cords[0][0]++; // Move north
+            case EAST -> DND.Cords[0][1]++; // Move east
+            case SOUTH -> DND.Cords[0][0]--; // Move south
+            case WEST -> DND.Cords[0][1]--; // Move west
+            default -> {
+            }
+        }
+    }
 
     public int ReLU(int num) {
         return (num > 0) ? num : 0;

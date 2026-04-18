@@ -15,6 +15,8 @@ public class DND {
 
         boolean running = true;
         while (running) {
+            AI ai = new AI();
+            ai.Run(player);
             map.printMap();
 
             String input = scanner.nextLine().toLowerCase();

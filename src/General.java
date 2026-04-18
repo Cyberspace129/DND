@@ -93,4 +93,8 @@ public class General {
             return "Turn [turn=" + turn + "]";
         }
     }
+    
+    public static void Print(String text) {
+        System.out.println(text);
+    }
 }

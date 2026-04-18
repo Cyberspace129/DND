@@ -75,7 +75,7 @@ public class Map {
         DESERT,
         RANDOM
     }
-
+    
     public Map(int width, int height, TerrainType terrain) {
         this.width = width;
         this.height = height;
